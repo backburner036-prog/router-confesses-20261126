@@ -29,7 +29,23 @@ TEXT = "I dropped the Wi-Fi right at the climax. The villain had a better router
 OUT = Path("/output/entry.txt")
 
 
+def check_single_line(text):
+    """Gate: the entry must be exactly one line (no newline inside)."""
+    assert "\n" not in text, "entry must be a single line"
+    assert text.strip(), "entry must not be blank"
+    return text
+
+
+def check_length(text, lo=1, hi=200):
+    """Gate: /output/entry.txt must be 1-200 UTF-8 chars (bounty gate)."""
+    size = len(text)
+    assert lo <= size <= hi, f"entry must be {lo}-{hi} chars, got {size}"
+    return size
+
+
 def main():
+    check_single_line(TEXT)
+    check_length(TEXT)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", encoding="utf-8") as fh:
         fh.write(TEXT)
